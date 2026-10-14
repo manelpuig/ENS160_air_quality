@@ -7,7 +7,7 @@ This guide proposes one repository, `ENS160_air_quality`, supporting two workflo
 - Standalone Python on a PC, without ROS 2 or a Raspberry Pi.
 - ROS 2 integration in a robot workspace, alongside `my_rUBot_mecanum`.
 
-This is a proposed structure and integration guide. Application scripts, ROS nodes and firmware mentioned below must be implemented before their execution commands are usable. Git commands apply once the repositories exist and access is configured.
+The repository includes a standalone serial reader, Arduino firmware and ROS 2 packages. The hardware-specific configuration is based on the reference `ENS160_rUBot` project and must still be validated on the physical controller. Git commands apply once the repositories exist and access is configured.
 
 ## Sensor and software names
 
@@ -36,8 +36,10 @@ Keep two main implementation directories, `python/` and `ros2/`, plus shared doc
 | `docs/integration.md` | This guide: project integration and synchronization |
 | `python/COLCON_IGNORE` | Empty marker preventing colcon from scanning this directory |
 | `python/requirements.txt` | Dependencies for the standalone Python application |
+| `python/ens160_serial.py` | Parser and typed representation of one sensor record |
 | `python/read_air_quality.py` | Standalone serial reader |
 | `python/arduino/ens160_serial/ens160_serial.ino` | Firmware reading the sensor and transmitting data over USB serial |
+| `ros2/ens160_interfaces/msg/ENS160Reading.msg` | Typed ROS 2 sensor message |
 | `ros2/ens160_air_quality_ros/package.xml` | ROS package metadata and dependency declarations |
 | `ros2/ens160_air_quality_ros/setup.py` | ROS Python package installation and executable entry points |
 | `ros2/ens160_air_quality_ros/setup.cfg` | ROS executable installation settings |
@@ -101,10 +103,10 @@ py -m venv .venv
 python -m pip install -r python/requirements.txt
 ```
 
-The proposed reader should accept `--port` and `--baud` arguments. For example, after implementing that interface and configuring the firmware for 115200 baud:
+The reader accepts `--port` and `--baud` arguments. With the included firmware configuration:
 
 ```bash
-python python/read_air_quality.py --port /dev/ttyACM0 --baud 115200
+python python/read_air_quality.py --port /dev/ttyACM0 --baud 9600
 ```
 
 On Windows, replace the device path with the actual COM port, such as `COM3`. Port names and baud rate are examples, not confirmed hardware settings.
@@ -143,17 +145,17 @@ source /opt/ros/humble/setup.bash
 source ~/air_quality_robot_ws/install/setup.bash
 ```
 
-The proposed ROS package should provide:
+The ROS packages provide:
 
 - An executable named `air_quality_node`.
 - A launch file named `air_quality.launch.py`.
 - Launch arguments for `port` and `baud_rate`.
-- Documented topics, message types, units and sensor validity handling.
+- A typed `ENS160Reading` message published on `/ens160/readings`.
 
-Once implemented, the intended launch command is:
+Launch it with:
 
 ```bash
-ros2 launch ens160_air_quality_ros air_quality.launch.py port:=/dev/ttyACM0 baud_rate:=115200
+ros2 launch ens160_air_quality_ros air_quality.launch.py port:=/dev/ttyACM0 baud_rate:=9600
 ```
 
 Run the robot bringup in another terminal using that repository's documented launch command. A robot-project launch file can later include both bringups. It does not need to copy the sensor code.

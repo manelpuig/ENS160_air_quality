@@ -24,7 +24,21 @@ A Raspberry Pi is not required for the standalone PC workflow.
 - [Hardware and wiring](docs/wiring.md)
 - [Project integration and Git synchronization](docs/integration.md)
 
+## Quick start
+
+List serial ports and run the standalone reader:
+
+```bash
+python -m pip install -r python/requirements.txt
+python python/read_air_quality.py --list-ports
+python python/read_air_quality.py --port COM3 --baud 9600
+```
+
+On Linux, use the detected device such as `/dev/ttyACM0` instead of `COM3`.
+See the directory-specific READMEs for firmware upload and ROS 2 commands.
+
 ## Status
 
-Initial repository structure. Firmware and application code
-are under development.
+The serial protocol, standalone reader, six-sensor Arduino firmware and ROS 2
+publisher are implemented. Hardware validation is still required on the
+physical controller and ENS160 array.

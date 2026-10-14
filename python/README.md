@@ -4,8 +4,8 @@ This directory contains the standalone application for reading ENS160
 measurements on a PC through a USB-connected microcontroller. ROS 2 and a
 Raspberry Pi are not required for this workflow.
 
-The serial reader is not implemented yet. Its final input format will be
-defined together with the microcontroller firmware.
+The reader accepts the text protocol produced by the included firmware and
+prints one JSON object per sensor sample. It can also append samples to CSV.
 
 ## 1. Prerequisites
 
@@ -82,26 +82,32 @@ The microcontroller must be connected for its port to appear. Typical names
 include `COM3` on Windows and `/dev/ttyACM0` on Ubuntu; use the actual detected
 port rather than assuming these example names.
 
-## 6. Run the application once implemented
+## 6. Run the application
 
-The proposed reader is `python/read_air_quality.py`, with `--port` and
-`--baud` arguments. The following commands are examples of its intended
-interface; they become usable after that script is implemented.
+First detect the available serial ports:
+
+```bash
+python python/read_air_quality.py --list-ports
+```
+
+Then pass the detected port to `python/read_air_quality.py`.
 
 Windows:
 
 ```powershell
-python python/read_air_quality.py --port COM3 --baud 115200
+python python/read_air_quality.py --port COM3 --baud 9600
 ```
 
 Ubuntu:
 
 ```bash
-python python/read_air_quality.py --port /dev/ttyACM0 --baud 115200
+python python/read_air_quality.py --port /dev/ttyACM0 --baud 9600
 ```
 
 Use the baud rate configured in the firmware. Close the Arduino Serial
 Monitor and any ROS serial reader before opening the same port in Python.
+
+To save readings as CSV, add for example `--csv measurements/run01.csv`.
 
 ## 7. Resume work in a later session
 
