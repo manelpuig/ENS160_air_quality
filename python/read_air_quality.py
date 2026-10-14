@@ -18,7 +18,7 @@ CSV_FIELDS = list(ENS160Reading.__dataclass_fields__)
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--port", help="Serial port, for example COM3 or /dev/ttyACM0")
+    parser.add_argument("--port", help="Serial port, for example COM3 or /dev/ens160")
     parser.add_argument("--baud", type=int, default=9600, help="Serial baud rate (default: 9600)")
     parser.add_argument("--timeout", type=float, default=1.0, help="Read timeout in seconds")
     parser.add_argument("--csv", type=Path, help="Optionally append readings to this CSV file")

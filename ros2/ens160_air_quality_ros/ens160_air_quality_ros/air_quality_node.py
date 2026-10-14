@@ -14,7 +14,7 @@ from .protocol import parse_reading
 class AirQualityNode(Node):
     def __init__(self) -> None:
         super().__init__("air_quality_node")
-        self.declare_parameter("port", "/dev/ttyACM0")
+        self.declare_parameter("port", "/dev/ens160")
         self.declare_parameter("baud_rate", 9600)
         self.declare_parameter("timeout", 0.05)
         self.declare_parameter("poll_period", 0.02)

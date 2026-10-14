@@ -15,7 +15,7 @@ prints one JSON object per sensor sample. It can also append samples to CSV.
 - Git and VS Code are optional but recommended.
 
 The exact board, pins, voltage levels and Arduino libraries must be confirmed
-before uploading firmware. See [Hardware and wiring](../docs/wiring.md).
+before uploading firmware. See [Hardware and wiring](../docs/1_wiring.md).
 
 ## 2. Create a virtual environment
 
@@ -79,8 +79,8 @@ python -m serial.tools.list_ports
 ```
 
 The microcontroller must be connected for its port to appear. Typical names
-include `COM3` on Windows and `/dev/ttyACM0` on Ubuntu; use the actual detected
-port rather than assuming these example names.
+include `COM3` on Windows and `/dev/ttyACM0` on Ubuntu. After installing the
+project's `udev` rule, use the persistent `/dev/ens160` alias.
 
 ## 6. Run the application
 
@@ -101,7 +101,7 @@ python python/read_air_quality.py --port COM3 --baud 9600
 Ubuntu:
 
 ```bash
-python python/read_air_quality.py --port /dev/ttyACM0 --baud 9600
+python python/read_air_quality.py --port /dev/ens160 --baud 9600
 ```
 
 Use the baud rate configured in the firmware. Close the Arduino Serial
@@ -144,8 +144,9 @@ the virtual environment. If `.venv` was already tracked, adding it to
 
 ## Related documentation
 
-- [Hardware and wiring](../docs/wiring.md)
-- [Project integration and Git synchronization](../docs/integration.md)
+- [Hardware and wiring](../docs/1_wiring.md)
+- [Project integration and Git synchronization](../docs/2_integration.md)
+- [Persistent Linux device name](../docs/3_udev_rules.md)
 - Firmware notes: `arduino/README.md`.
 
 This `.venv` setup is for standalone Python. Follow the separate ROS 2 guide

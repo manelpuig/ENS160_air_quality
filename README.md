@@ -21,8 +21,9 @@ A Raspberry Pi is not required for the standalone PC workflow.
 
 ## Documentation
 
-- [Hardware and wiring](docs/wiring.md)
-- [Project integration and Git synchronization](docs/integration.md)
+- [1. Hardware and wiring](docs/1_wiring.md)
+- [2. Project integration and Git synchronization](docs/2_integration.md)
+- [3. Persistent Linux device name](docs/3_udev_rules.md)
 
 ## Quick start
 
@@ -34,7 +35,8 @@ python python/read_air_quality.py --list-ports
 python python/read_air_quality.py --port COM3 --baud 9600
 ```
 
-On Linux, use the detected device such as `/dev/ttyACM0` instead of `COM3`.
+On Linux, install the documented `udev` rule and use `/dev/ens160`, or use the
+detected `/dev/ttyACM*` device until the persistent alias is configured.
 See the directory-specific READMEs for firmware upload and ROS 2 commands.
 
 ## Status

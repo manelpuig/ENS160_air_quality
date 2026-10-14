@@ -32,8 +32,9 @@ Keep two main implementation directories, `python/` and `ros2/`, plus shared doc
 | Path | Purpose |
 | --- | --- |
 | `README.md` | Overview and links to setup guides |
-| `docs/wiring.md` | Exact hardware, pin connections, voltage levels and USB connection |
-| `docs/integration.md` | This guide: project integration and synchronization |
+| `docs/1_wiring.md` | Exact hardware, pin connections, voltage levels and USB connection |
+| `docs/2_integration.md` | This guide: project integration and synchronization |
+| `docs/3_udev_rules.md` | Persistent Linux device name and serial permissions |
 | `python/COLCON_IGNORE` | Empty marker preventing colcon from scanning this directory |
 | `python/requirements.txt` | Dependencies for the standalone Python application |
 | `python/ens160_serial.py` | Parser and typed representation of one sensor record |
@@ -74,7 +75,7 @@ A Raspberry Pi is optional. An ordinary PC needs an interface such as this micro
 
 The firmware should provide the same documented serial format for both readers, including units and sensor validity status. Both readers must use the configured firmware baud rate. Only one reader should open the serial port at a time.
 
-Confirm the exact microcontroller and breakout before specifying pin numbers or supply voltages. Bare-chip limits and breakout-board input limits may differ. Record verified connections in `docs/wiring.md`.
+Confirm the exact microcontroller and breakout before specifying pin numbers or supply voltages. Bare-chip limits and breakout-board input limits may differ. Record verified connections in `docs/1_wiring.md`.
 
 ## Standalone Python on a PC
 
@@ -106,7 +107,7 @@ python -m pip install -r python/requirements.txt
 The reader accepts `--port` and `--baud` arguments. With the included firmware configuration:
 
 ```bash
-python python/read_air_quality.py --port /dev/ttyACM0 --baud 9600
+python python/read_air_quality.py --port /dev/ens160 --baud 9600
 ```
 
 On Windows, replace the device path with the actual COM port, such as `COM3`. Port names and baud rate are examples, not confirmed hardware settings.
@@ -155,7 +156,7 @@ The ROS packages provide:
 Launch it with:
 
 ```bash
-ros2 launch ens160_air_quality_ros air_quality.launch.py port:=/dev/ttyACM0 baud_rate:=9600
+ros2 launch ens160_air_quality_ros air_quality.launch.py port:=/dev/ens160 baud_rate:=9600
 ```
 
 Run the robot bringup in another terminal using that repository's documented launch command. A robot-project launch file can later include both bringups. It does not need to copy the sensor code.
@@ -185,7 +186,7 @@ git pull --ff-only
 After editing the integration guide, review and save that specific file:
 
 ```bash
-git add docs/integration.md
+git add docs/2_integration.md
 git diff --cached
 git commit -m "Document project integration and Git synchronization"
 git push
@@ -223,8 +224,9 @@ Exclude generated files such as `build/`, `install/`, `log/`, `.venv/`, `__pycac
 | Document | Content |
 | --- | --- |
 | `README.md` | What the repository does and how to choose Python or ROS 2 |
-| `docs/wiring.md` | Hardware identification, electrical connections and firmware upload |
-| `docs/integration.md` | Cloning, workspace integration and Git synchronization |
+| `docs/1_wiring.md` | Hardware identification, electrical connections and firmware upload |
+| `docs/2_integration.md` | Cloning, workspace integration and Git synchronization |
+| `docs/3_udev_rules.md` | Persistent Linux serial alias and permissions |
 
 ## References
 

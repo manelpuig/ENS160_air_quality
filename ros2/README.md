@@ -20,7 +20,7 @@ source install/setup.bash
 
 ```bash
 ros2 launch ens160_air_quality_ros air_quality.launch.py \
-  port:=/dev/ttyACM0 baud_rate:=9600
+  port:=/dev/ens160 baud_rate:=9600
 ```
 
 Replace the port with the actual device. The node publishes one
@@ -36,5 +36,5 @@ ros2 topic echo /ens160/readings
 Only one program can open the serial port at a time. Stop the standalone
 Python reader and the Arduino Serial Monitor before starting this node.
 
-See [the integration guide](../docs/integration.md) for workspace integration
+See [the integration guide](../docs/2_integration.md) for workspace integration
 and Git synchronization.

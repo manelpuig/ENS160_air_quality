@@ -1,0 +1,2 @@
+# Replace all placeholders with values read from the physical ENS160 Arduino.
+SUBSYSTEM=="tty", ACTION=="add", ATTRS{idVendor}=="VENDOR_ID", ATTRS{idProduct}=="PRODUCT_ID", ATTRS{serial}=="SERIAL_NUMBER", SYMLINK+="ens160", GROUP="dialout", MODE="0660"

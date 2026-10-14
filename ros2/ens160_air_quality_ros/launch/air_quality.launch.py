@@ -7,7 +7,7 @@ from launch_ros.parameter_descriptions import ParameterValue
 
 def generate_launch_description():
     return LaunchDescription([
-        DeclareLaunchArgument("port", default_value="/dev/ttyACM0"),
+        DeclareLaunchArgument("port", default_value="/dev/ens160"),
         DeclareLaunchArgument("baud_rate", default_value="9600"),
         Node(
             package="ens160_air_quality_ros",
