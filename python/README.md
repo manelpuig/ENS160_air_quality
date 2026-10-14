@@ -1,17 +1,146 @@
 # Standalone Python Application
 
-Read ENS160 measurements on a PC through a USB-connected
-microcontroller, without ROS 2 or a Raspberry Pi.
+This directory contains the standalone application for reading ENS160
+measurements on a PC through a USB-connected microcontroller. ROS 2 and a
+Raspberry Pi are not required for this workflow.
 
-## Dependencies
+The serial reader is not implemented yet. Its final input format will be
+defined together with the microcontroller firmware.
 
-From the repository root:
+## 1. Prerequisites
 
-    python -m pip install -r python/requirements.txt
+- Python 3.10 or newer.
+- A microcontroller connected to the PC through USB.
+- The ENS160 connected to that microcontroller through I2C.
+- Git and VS Code are optional but recommended.
 
-## Implementation
+The exact board, pins, voltage levels and Arduino libraries must be confirmed
+before uploading firmware. See [Hardware and wiring](../docs/wiring.md).
 
-The serial reader will be added after defining the firmware
-output format.
+## 2. Create a virtual environment
 
-Arduino firmware is stored in the arduino directory.
+Run these commands from the repository root.
+
+Windows PowerShell:
+
+```powershell
+py -m venv .venv
+.\.venv\Scripts\Activate.ps1
+```
+
+Ubuntu:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+## 3. Install the Python dependencies
+
+```bash
+python -m pip install --upgrade pip
+python -m pip install -r python/requirements.txt
+```
+
+Arduino libraries are installed through the Arduino toolchain, not through
+pip. These requirements do not install ROS 2.
+
+## 4. Select the environment in VS Code
+
+1. Install the **Python** extension from Microsoft if it is not installed.
+2. Open the Command Palette with **Ctrl+Shift+P**.
+3. Choose **Python: Select Interpreter**.
+4. Select the interpreter from this repository's `.venv` directory.
+
+If it is not listed, choose **Enter interpreter path** and browse to:
+
+| System | Interpreter path relative to the repository root |
+| --- | --- |
+| Windows | `.venv/Scripts/python.exe` |
+| Ubuntu | `.venv/bin/python` |
+
+Open a new terminal and verify which Python it uses. If necessary, activate
+the environment manually using the command for your system above.
+
+## 5. Verify the setup
+
+```bash
+python -c "import sys; print(sys.executable)"
+python -c "import serial; print(serial.__version__)"
+```
+
+The first command should print a path inside this repository's `.venv`.
+The second should print the installed pyserial version.
+
+You can list detected serial ports without running the sensor application:
+
+```bash
+python -m serial.tools.list_ports
+```
+
+The microcontroller must be connected for its port to appear. Typical names
+include `COM3` on Windows and `/dev/ttyACM0` on Ubuntu; use the actual detected
+port rather than assuming these example names.
+
+## 6. Run the application once implemented
+
+The proposed reader is `python/read_air_quality.py`, with `--port` and
+`--baud` arguments. The following commands are examples of its intended
+interface; they become usable after that script is implemented.
+
+Windows:
+
+```powershell
+python python/read_air_quality.py --port COM3 --baud 115200
+```
+
+Ubuntu:
+
+```bash
+python python/read_air_quality.py --port /dev/ttyACM0 --baud 115200
+```
+
+Use the baud rate configured in the firmware. Close the Arduino Serial
+Monitor and any ROS serial reader before opening the same port in Python.
+
+## 7. Resume work in a later session
+
+You do not need to create the environment again. Open the repository,
+activate the existing `.venv`, and run the application.
+
+If `requirements.txt` changed after a Git update, install its dependencies
+again:
+
+```bash
+python -m pip install -r python/requirements.txt
+```
+
+To leave the activated environment:
+
+```bash
+deactivate
+```
+
+## Git exclusions
+
+Ensure the root `.gitignore` includes these entries, adding any that are
+missing:
+
+```gitignore
+.venv/
+__pycache__/
+*.py[cod]
+```
+
+Commit `requirements.txt`, application code and documentation. Do not commit
+the virtual environment. If `.venv` was already tracked, adding it to
+`.gitignore` alone does not remove it from Git tracking.
+
+## Related documentation
+
+- [Hardware and wiring](../docs/wiring.md)
+- [Project integration and Git synchronization](../docs/integration.md)
+- Firmware notes: `arduino/README.md`.
+
+This `.venv` setup is for standalone Python. Follow the separate ROS 2 guide
+for building and running the ROS package.
